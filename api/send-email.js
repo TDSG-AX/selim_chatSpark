@@ -35,21 +35,20 @@ module.exports = async function handler(req, res) {
             user_id: EMAILJS_PUBLIC_KEY, // EmailJS Public Key
             accessToken: EMAILJS_PRIVATE_KEY,
             template_params: {
-                // English Keys (Compatibility)
+                // Precise mapping based on user template
+                visitor_name: name,
+                contact: contact,
+                date: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+                inquiry_summary: chatLog.split('\n')[0] || "희망리턴패키지 상담 문의",
+                full_conversation: chatLog,
+
+                // Keep old keys for redundancy
                 from_name: name,
                 user_name: name,
-                contact_info: contact,
                 user_contact: contact,
                 chat_log: chatLog,
                 message: chatLog,
                 submitted_at: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
-
-                // Korean Keys (User Template Matching)
-                문의자_이름: name,
-                연락처: contact,
-                문의_내용: chatLog,
-                접수_일시: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
-
                 reply_to: contact,
             }
         };
