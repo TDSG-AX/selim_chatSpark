@@ -12,6 +12,7 @@ module.exports = async function handler(req, res) {
     if (req.method === 'OPTIONS') return res.status(200).end();
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
+    console.log("Incoming Lead Data:", req.body);
     const { name, contact, chatLog } = req.body;
 
     if (!name || !contact) {
@@ -35,8 +36,12 @@ module.exports = async function handler(req, res) {
             accessToken: EMAILJS_PRIVATE_KEY,
             template_params: {
                 from_name: name,
+                user_name: name,
                 contact_info: contact,
+                user_contact: contact,
                 chat_log: chatLog,
+                message: chatLog,
+                submitted_at: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
                 reply_to: contact,
             }
         };
