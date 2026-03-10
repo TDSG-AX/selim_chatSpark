@@ -5,7 +5,7 @@
 
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
-const SYSTEM_INSTRUCTION = `당신은 '희망리턴패키지 지원사업'의 전문 상담 챗봇입니다.
+const SYSTEM_INSTRUCTION = `당신은 '희망리턴패키지 지원사업'의 전문 상담 챗봇 'ChatSpark'입니다.
 사용자의 질문에 아래 [상담 기본 자료]를 바탕으로 친절하고 정확하게 답변해주세요.
 
 [상담 지침 및 대화 규칙]
