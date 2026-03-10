@@ -38,7 +38,7 @@ module.exports = async function handler(req, res) {
   if (!apiKey) {
     console.warn("chatspark (API Key) is missing. Using mock response for development.");
     // Provide a mock response so the UI can be tested without an API key immediately
-    return res.status(200).json({ reply: "안녕하세요! 현재 API 키가 설정되지 않아 테스트 모드로 동작 중입니다. 질문하신 내용은 잘 접수되었습니다!" });
+    return res.status(200).json({ text: "안녕하세요! 현재 API 키가 설정되지 않아 테스트 모드로 동작 중입니다. 질문하신 내용은 잘 접수되었습니다!" });
   }
 
   const { contents } = req.body;
@@ -67,7 +67,7 @@ module.exports = async function handler(req, res) {
     }
 
     const data = await response.json();
-    return res.status(200).json({ reply: data.candidates[0].content.parts[0].text });
+    return res.status(200).json({ text: data.candidates[0].content.parts[0].text });
 
   } catch (error) {
     console.error('Gemini API error:', error);
