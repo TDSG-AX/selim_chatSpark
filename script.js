@@ -53,7 +53,7 @@ async function handleInquiryPhase() {
     const typingIndicator = showTypingIndicator();
 
     try {
-        const response = await fetch('https://flashgta-github-io.vercel.app/api/chat', {
+        const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
