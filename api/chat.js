@@ -1,7 +1,7 @@
 // api/chat.js - Vercel Serverless Function (ChatSpark version)
 //
 // ⚠️ Vercel 환경변수 설정 필요:
-// GEMINI_API_KEY: Google AI Studio (https://aistudio.google.com/app/apikey)
+// chatspark: Google AI Studio (https://aistudio.google.com/app/apikey)
 
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 
@@ -34,9 +34,9 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = process.env.chatspark;
   if (!apiKey) {
-    console.warn("GEMINI_API_KEY is missing. Using mock response for development.");
+    console.warn("chatspark (API Key) is missing. Using mock response for development.");
     // Provide a mock response so the UI can be tested without an API key immediately
     return res.status(200).json({ reply: "안녕하세요! 현재 API 키가 설정되지 않아 테스트 모드로 동작 중입니다. 질문하신 내용은 잘 접수되었습니다!" });
   }

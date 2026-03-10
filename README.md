@@ -69,7 +69,7 @@ selim_chatSpark/
 
 | 환경변수 | 설명 | 발급 위치 |
 |----------|------|-----------|
-| `GEMINI_API_KEY` | Google Gemini AI API 키 | [Google AI Studio](https://aistudio.google.com/app/apikey) |
+| `chatspark` | Google Gemini AI API 키 | [Google AI Studio](https://aistudio.google.com/app/apikey) |
 | `EMAILJS_PUBLIC_KEY` | EmaiJS 연동을 위한 Public Key (예정) | [EmailJS Account Dashboard] |
 | `EMAILJS_PRIVATE_KEY` | EmailJS 연동을 위한 Private Key (예정) | [EmailJS Account Dashboard] |
 | `EMAILJS_SERVICE_ID` | 연결된 이메일 서비스 ID (예정) | [EmailJS Services Dashboard] |
