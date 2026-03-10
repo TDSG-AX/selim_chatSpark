@@ -38,6 +38,11 @@ async function sendMessage() {
         handleNamePhase(text);
     } else if (currentStep === 'contact_info') {
         await handleContactPhase(text);
+    } else if (currentStep === 'privacy') {
+        // If they type instead of clicking buttons, treat it as declining consent and starting new inquiry
+        currentStep = 'inquiry';
+        conversationHistory.push({ role: "user", content: text });
+        await handleInquiryPhase();
     } else if (currentStep === 'done') {
         setTimeout(() => {
             appendMessage("이미 상담 접수가 완료되어 담당자가 곧 연락드릴 예정입니다. 감사합니다. 추가 질문이 있으시면 언제든 챗봇에게 남겨주세요.", 'bot');
@@ -51,15 +56,18 @@ async function handleInquiryPhase() {
     const typingIndicator = showTypingIndicator();
 
     try {
+        const payload = {
+            contents: conversationHistory.map(msg => ({
+                role: msg.role === 'user' ? 'user' : 'model',
+                parts: [{ text: msg.content }]
+            }))
+        };
+        console.log("Sending to Gemini:", payload);
+
         const response = await fetch('https://selim-chat-spark.vercel.app/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: conversationHistory.map(msg => ({
-                    role: msg.role === 'user' ? 'user' : 'model',
-                    parts: [{ text: msg.content }]
-                }))
-            })
+            body: JSON.stringify(payload)
         });
 
         const data = await response.json();

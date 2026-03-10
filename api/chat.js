@@ -57,20 +57,28 @@ module.exports = async function handler(req, res) {
       })
     });
 
-    if (response.status === 429) {
-      return res.status(429).json({ error: 'Too many requests. Please wait a moment.' });
-    }
+    const data = await response.json();
 
     if (!response.ok) {
-      const errBody = await response.text();
-      throw new Error(`HTTP ${response.status}: ${errBody}`);
+      console.error('Gemini API Error Detail:', JSON.stringify(data, null, 2));
+      return res.status(response.status).json({
+        error: 'Gemini API call failed',
+        details: data.error?.message || 'Unknown error'
+      });
     }
 
-    const data = await response.json();
+    // Safety check for candidates (handling safety filter blocks)
+    if (!data.candidates || data.candidates.length === 0 || !data.candidates[0].content || !data.candidates[0].content.parts) {
+      console.error('Invalid/Blocked Gemini Response:', JSON.stringify(data, null, 2));
+      return res.status(200).json({
+        text: "죄송합니다. 해당 질문에 대해 답변을 드릴 수 없습니다. (안전 필터에 의해 차단되었거나 답변을 생성하지 못했습니다.)"
+      });
+    }
+
     return res.status(200).json({ text: data.candidates[0].content.parts[0].text });
 
   } catch (error) {
-    console.error('Gemini API error:', error);
-    return res.status(500).json({ error: 'Failed to get AI response' });
+    console.error('Internal Server Error:', error);
+    return res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
 };
