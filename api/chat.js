@@ -41,21 +41,10 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ reply: "안녕하세요! 현재 API 키가 설정되지 않아 테스트 모드로 동작 중입니다. 질문하신 내용은 잘 접수되었습니다!" });
   }
 
-  // Expecting a simple { message, history } format from our script.js
-  const { message, history } = req.body;
+  const { contents } = req.body;
 
-  if (!message) return res.status(400).json({ error: 'Message is required' });
-
-  // Convert our script.js history format to Gemini's expected contents format
-  let contents = [];
-
-  if (history && Array.isArray(history)) {
-    contents = history.map(msg => ({
-      role: msg.role === 'user' ? 'user' : 'model',
-      parts: [{ text: msg.content }]
-    }));
-  } else {
-    contents = [{ role: 'user', parts: [{ text: message }] }];
+  if (!contents || !Array.isArray(contents)) {
+    return res.status(400).json({ error: 'Invalid request body. "contents" array is required.' });
   }
 
   try {
