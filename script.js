@@ -4,6 +4,7 @@ const aiChatWindow = document.getElementById('aiChatWindow');
 const chatMessages = document.getElementById('chatMessages');
 const chatInput = document.getElementById('chatInput');
 const chatSendBtn = document.getElementById('chatSendBtn');
+const floatingChatBtn = document.getElementById('floatingChatBtn');
 
 // Track conversation history to send to the API for context
 let conversationHistory = [];
@@ -20,7 +21,7 @@ async function sendMessage() {
 
     // 1. Add User Message to UI
     appendMessage(text, 'user');
-    
+
     // Save to history
     conversationHistory.push({ role: "user", content: text });
 
@@ -39,7 +40,7 @@ async function sendMessage() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
                 message: text,
                 history: conversationHistory // Passing history for context
             })
@@ -73,15 +74,15 @@ async function sendMessage() {
 function appendMessage(text, sender) {
     const div = document.createElement('div');
     div.classList.add('message', sender === 'user' ? 'user-message' : 'bot-message');
-    
+
     const contentDiv = document.createElement('div');
     contentDiv.classList.add('message-content');
-    
+
     // Simple marked text replacing linebreaks with <br>
     contentDiv.innerHTML = text.replace(/\n/g, '<br>');
-    
+
     div.appendChild(contentDiv);
-    
+
     // If a typing indicator exists, insert before it. Otherwise append.
     const typingIndicator = document.getElementById('typingIndicator');
     if (typingIndicator && sender === 'user') {
@@ -89,7 +90,7 @@ function appendMessage(text, sender) {
     } else {
         chatMessages.appendChild(div);
     }
-    
+
     // Auto-scroll to bottom
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
@@ -98,23 +99,29 @@ function showTypingIndicator() {
     const div = document.createElement('div');
     div.id = 'typingIndicator';
     div.classList.add('typing-indicator');
-    
+
     for (let i = 0; i < 3; i++) {
         const dot = document.createElement('div');
         dot.classList.add('typing-dot');
         div.appendChild(dot);
     }
-    
+
     chatMessages.appendChild(div);
     chatMessages.scrollTop = chatMessages.scrollHeight;
-    
+
     return div;
 }
 
-// Ensure the chat window opens gracefully on load
-window.addEventListener('DOMContentLoaded', () => {
-    // Add small delay for aesthetic fade in
-    setTimeout(() => {
-        aiChatWindow.classList.add('active');
-    }, 800);
-});
+// Handle opening and closing of the chat window
+function toggleChatWindow() {
+    aiChatWindow.classList.toggle('active');
+
+    // Toggle the button visibility
+    if (aiChatWindow.classList.contains('active')) {
+        floatingChatBtn.classList.add('hidden');
+        // Auto-focus input when opening
+        setTimeout(() => chatInput.focus(), 300);
+    } else {
+        floatingChatBtn.classList.remove('hidden');
+    }
+}

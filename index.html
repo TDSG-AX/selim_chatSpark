@@ -83,8 +83,14 @@
         </footer>
     </div>
 
+    <!-- Floating Chat Button -->
+    <button class="floating-chat-btn" id="floatingChatBtn" onclick="toggleChatWindow()">
+        <span class="btn-text">희망리턴패키지 지원 상담</span>
+        <i class="fas fa-comment-dots"></i>
+    </button>
+
     <!-- GEMINI AI CHAT WIDGET (Ported from flashgta) -->
-    <div class="ai-chat-window active" id="aiChatWindow">
+    <div class="ai-chat-window" id="aiChatWindow">
         <div class="chat-header">
             <div class="chat-header-icon">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -100,6 +106,9 @@
                 <span class="chat-title">ChatSpark AI</span>
                 <span class="chat-subtitle">Powered by Gemini ✨</span>
             </div>
+            <button class="chat-close-btn" onclick="toggleChatWindow()">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
 
         <div class="chat-messages" id="chatMessages">
