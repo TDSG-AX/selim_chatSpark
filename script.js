@@ -53,7 +53,7 @@ async function handleInquiryPhase() {
     const typingIndicator = showTypingIndicator();
 
     try {
-        const response = await fetch('/api/chat', {
+        const response = await fetch('https://selim-chatspark.vercel.app/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -149,7 +149,7 @@ async function handleContactPhase(text) {
 
     try {
         // Send email via our new backend serverless function
-        const response = await fetch('/api/send-email', {
+        const response = await fetch('https://selim-chatspark.vercel.app/api/send-email', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(leadInfo)
