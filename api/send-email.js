@@ -35,6 +35,7 @@ module.exports = async function handler(req, res) {
             user_id: EMAILJS_PUBLIC_KEY, // EmailJS Public Key
             accessToken: EMAILJS_PRIVATE_KEY,
             template_params: {
+                // English Keys (Compatibility)
                 from_name: name,
                 user_name: name,
                 contact_info: contact,
@@ -42,6 +43,13 @@ module.exports = async function handler(req, res) {
                 chat_log: chatLog,
                 message: chatLog,
                 submitted_at: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+
+                // Korean Keys (User Template Matching)
+                문의자_이름: name,
+                연락처: contact,
+                문의_내용: chatLog,
+                접수_일시: new Date().toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' }),
+
                 reply_to: contact,
             }
         };

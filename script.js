@@ -6,8 +6,6 @@ const chatInput = document.getElementById('chatInput');
 const chatSendBtn = document.getElementById('chatSendBtn');
 const floatingChatBtn = document.getElementById('floatingChatBtn');
 
-// Track conversation history to send to the API for context
-// Track conversation history to send to the API for context
 let conversationHistory = [];
 let currentStep = 'inquiry';
 let leadInfo = { name: '', contact: '', consent: false, chatLog: '' };
@@ -144,6 +142,8 @@ async function handleContactPhase(text) {
 
     // Convert History state to string for the email
     leadInfo.chatLog = conversationHistory.map(msg => `[${msg.role.toUpperCase()}] ${msg.content}`).join('\n');
+
+    console.log("Submitting Lead Info:", leadInfo);
 
     const typingIndicator = showTypingIndicator();
 
