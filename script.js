@@ -10,6 +10,11 @@ let conversationHistory = [];
 let currentStep = 'inquiry';
 let leadInfo = { name: '', contact: '', consent: false, chatLog: '' };
 
+// TTS State
+let ttsEnabled = false;
+let synthesis = window.speechSynthesis;
+let voice = null;
+
 function handleKeyPress(event) {
     if (event.key === 'Enter') {
         sendMessage();
@@ -86,6 +91,7 @@ async function handleInquiryPhase() {
             if (botReply) {
                 appendMessage(botReply, 'bot');
                 conversationHistory.push({ role: "model", content: botReply });
+                speak(botReply);
             }
 
             if (triggerFound) {
@@ -126,11 +132,19 @@ window.submitConsent = function (agreed) {
         appendMessage("예, 동의합니다", 'user');
         leadInfo.consent = true;
         currentStep = 'contact_name';
-        setTimeout(() => appendMessage("감사합니다. 담당자가 연락드릴 식별을 위해 **성함**을 입력해주세요.", 'bot'), 500);
+        setTimeout(() => {
+            const msg = "감사합니다. 담당자가 연락드릴 식별을 위해 **성함**을 입력해주세요.";
+            appendMessage(msg, 'bot');
+            speak(msg);
+        }, 500);
     } else {
         appendMessage("아니오", 'user');
         currentStep = 'inquiry';
-        setTimeout(() => appendMessage("동의하지 않으셔도 계속해서 챗봇과 자유롭게 안내를 받으실 수 있습니다. 더 궁금하신 점을 편하게 질문해주세요.", 'bot'), 500);
+        setTimeout(() => {
+            const msg = "동의하지 않으셔도 계속해서 챗봇과 자유롭게 안내를 받으실 수 있습니다. 더 궁금하신 점을 편하게 질문해주세요.";
+            appendMessage(msg, 'bot');
+            speak(msg);
+        }, 500);
     }
     enableInput();
 }
@@ -139,7 +153,9 @@ function handleNamePhase(text) {
     leadInfo.name = text;
     currentStep = 'contact_info';
     setTimeout(() => {
-        appendMessage("담당자가 안내 드릴 수 있는 **연락처(전화번호 또는 이메일)**를 남겨주세요.", 'bot');
+        const msg = "담당자가 안내 드릴 수 있는 **연락처(전화번호 또는 이메일)**를 남겨주세요.";
+        appendMessage(msg, 'bot');
+        speak(msg);
         enableInput();
     }, 500);
 }
@@ -166,9 +182,13 @@ async function handleContactPhase(text) {
         typingIndicator.remove();
 
         if (response.ok) {
-            appendMessage(`감사합니다, ${leadInfo.name}님! 남겨주신 연락처(${leadInfo.contact})로 담당자가 곧 안내를 드리겠습니다. 추가 궁금한 점이 있다면 언제든 챗봇에게 물어보세요.`, 'bot');
+            const msg = `감사합니다, ${leadInfo.name}님! 남겨주신 연락처(${leadInfo.contact})로 담당자가 곧 안내를 드리겠습니다. 추가 궁금한 점이 있다면 언제든 챗봇에게 물어보세요.`;
+            appendMessage(msg, 'bot');
+            speak(msg);
         } else {
-            appendMessage("죄송합니다. 시스템 오류로 담당자에게 정상적으로 전달되지 못했습니다. 잠시 후 다시 시도해주시거나 고객센터(1357)로 문의 바랍니다.", 'bot');
+            const msg = "죄송합니다. 시스템 오류로 담당자에게 정상적으로 전달되지 못했습니다. 잠시 후 다시 시도해주시거나 고객센터(1357)로 문의 바랍니다.";
+            appendMessage(msg, 'bot');
+            speak(msg);
         }
     } catch (error) {
         typingIndicator.remove();

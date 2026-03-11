@@ -504,8 +504,26 @@ body {
     }
 }
 
-.chat-close-btn {
+.chat-tts-btn {
     margin-left: auto;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-tts-btn:hover,
+.chat-tts-btn.active {
+    color: var(--primary-color);
+}
+
+.chat-close-btn {
     background: transparent;
     border: none;
     color: #94a3b8;
