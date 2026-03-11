@@ -40,11 +40,24 @@ async function sendMessage() {
     if (currentStep === 'inquiry') {
         await handleInquiryPhase();
     } else if (currentStep === 'contact_name') {
-        handleNamePhase(text);
+        if (checkIfInquiry(text)) {
+            // Smart Breakout: User changed their mind or is confused
+            currentStep = 'inquiry';
+            conversationHistory.push({ role: "user", content: text });
+            await handleInquiryPhase();
+        } else {
+            handleNamePhase(text);
+        }
     } else if (currentStep === 'contact_info') {
-        await handleContactPhase(text);
+        if (checkIfInquiry(text)) {
+            currentStep = 'inquiry';
+            conversationHistory.push({ role: "user", content: text });
+            await handleInquiryPhase();
+        } else {
+            await handleContactPhase(text);
+        }
     } else if (currentStep === 'privacy') {
-        // If they type instead of clicking buttons, treat it as declining consent and starting new inquiry
+        // If they type instead of clicking buttons, treat it as starting new inquiry or declining
         currentStep = 'inquiry';
         conversationHistory.push({ role: "user", content: text });
         await handleInquiryPhase();
@@ -318,6 +331,15 @@ window.toggleTTS = function () {
         synthesis.cancel();
     }
 };
+
+function checkIfInquiry(text) {
+    // Detect if input is likely a question or redirection (Korean patterns)
+    const inquiryKeywords = ["다른", "뭐", "어떻게", "문의", "궁금", "알아", "말고", "아니", "추천", "안나", "있나", "인가", "에요", "가요"];
+    const isLong = text.length > 10;
+    const hasKeyword = inquiryKeywords.some(k => text.includes(k));
+    const hasQuestionMark = text.includes('?');
+    return isLong || hasKeyword || hasQuestionMark;
+}
 
 // Initialize TTS on load
 initTTS();
