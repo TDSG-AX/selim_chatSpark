@@ -267,8 +267,15 @@ function toggleChatWindow() {
 function initTTS() {
     const setVoice = () => {
         const voices = synthesis.getVoices();
-        // Prefer Korean voices
-        voice = voices.find(v => v.lang.includes('ko-KR')) || voices.find(v => v.lang.includes('ko'));
+        // Priority: 1. Korean + "Natural", 2. Korean + "Google", 3. Any Korean, 4. Fallback
+        const koreanVoices = voices.filter(v => v.lang.includes('ko-KR') || v.lang.includes('ko'));
+        
+        voice = koreanVoices.find(v => v.name.includes('Natural')) || 
+                koreanVoices.find(v => v.name.includes('Google')) || 
+                koreanVoices[0] || 
+                null;
+        
+        if (voice) console.log("Selected TTS Voice:", voice.name);
     };
     if (synthesis.onvoiceschanged !== undefined) {
         synthesis.onvoiceschanged = setVoice;
