@@ -262,3 +262,55 @@ function toggleChatWindow() {
         floatingChatBtn.classList.remove('hidden');
     }
 }
+
+// --- TTS Logic ---
+function initTTS() {
+    const setVoice = () => {
+        const voices = synthesis.getVoices();
+        // Prefer Korean voices
+        voice = voices.find(v => v.lang.includes('ko-KR')) || voices.find(v => v.lang.includes('ko'));
+    };
+    if (synthesis.onvoiceschanged !== undefined) {
+        synthesis.onvoiceschanged = setVoice;
+    }
+    setVoice();
+}
+
+function speak(text) {
+    if (!ttsEnabled || !synthesis) return;
+
+    // Stop and clear current speaking
+    synthesis.cancel();
+
+    // Clean text: remove emojis and special triggers
+    const cleanText = text.replace(/\[INQUIRY_COMPLETE\]/g, '')
+        .replace(/[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, '')
+        .replace(/\*\*/g, ''); // Remove markdown bolds
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    if (voice) utterance.voice = voice;
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    synthesis.speak(utterance);
+}
+
+window.toggleTTS = function () {
+    ttsEnabled = !ttsEnabled;
+    const btn = document.getElementById('chatTtsBtn');
+    const icon = btn.querySelector('i');
+
+    if (ttsEnabled) {
+        btn.classList.add('active');
+        icon.classList.remove('fa-volume-mute');
+        icon.classList.add('fa-volume-up');
+        speak("음성 안내가 활성화되었습니다.");
+    } else {
+        btn.classList.remove('active');
+        icon.classList.remove('fa-volume-up');
+        icon.classList.add('fa-volume-mute');
+        synthesis.cancel();
+    }
+};
+
+// Initialize TTS on load
+initTTS();
