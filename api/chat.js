@@ -51,7 +51,7 @@ module.exports = async function handler(req, res) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents,
-        systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] }
+        systemInstruction: { parts: [{ text: dynamicSystemInstruction }] }
       })
     });
 

@@ -101,6 +101,6 @@ function initializeSearch() {
 const sharedEngine = initializeSearch();
 
 module.exports = {
-  search: (query, topK = 3) => sharedEngine.search(query, topK),
+  search: (query, topK = 5) => sharedEngine.search(query, topK),
   getRawDocuments: () => sharedEngine.documents
 };
