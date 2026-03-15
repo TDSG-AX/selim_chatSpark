@@ -3,7 +3,7 @@
 이 프로젝트는 소상공인을 대상으로 **OOOO패키지 지원사업(데모)**을 안내하고 상담하는 검색 기반 AI 가이드 서비스입니다. 바닐라 웹 기술(HTML/CSS/Vanilla JS)과 Vercel 서버리스 함수, 그리고 Google Gemini AI를 결합하여 설계된 'Search-First UX' 기반의 모던 웹 애플리케이션입니다.
 
 ## 🚀 실시간 데모 (Demo)
-👉 **[ChatSpark AI 가이드 바로가기](https://tdsg-ax.github.io/selim_chatSpark)**
+👉 **[ChatSpark AI](https://tdsg-ax.github.io/selim_chatSpark)**
 
 ---
 
