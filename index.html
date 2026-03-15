@@ -4,102 +4,374 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>(데모) OOO 지원사업 랜딩 페이지</title>
-    <!-- Use similar font as original -->
-    <link href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+    <title>(데모) OOOO 지원사업 검색 기반 가이드</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
     <!-- FontAwesome for the send icon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chat Widget Styles -->
+    <link href="chat-widget.css" rel="stylesheet">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;800&display=swap');
 
-    <link rel="stylesheet" href="style.css">
+        body {
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        .glow {
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.15);
+        }
+
+        .chat-bubble-bot {
+            border-top-left-radius: 2px;
+        }
+
+        .chat-bubble-user {
+            border-top-right-radius: 2px;
+        }
+
+        .hidden-chat {
+            display: none;
+        }
+
+        .sticky-active {
+            transform: translateY(0);
+        }
+
+        .sticky-inactive {
+            transform: translateY(-100%);
+        }
+    </style>
 </head>
 
-<body>
+<body class="bg-slate-50 text-slate-900 overflow-x-hidden">
 
-    <!-- Main Content Area: Hope Return Package -->
-    <div class="landing-container">
-        <header class="landing-header">
-            <h1 class="main-title">🌸 (demo) OOOO패키지 지원사업</h1>
-            <p class="sub-title">경영위기 OOOO의 따뜻한 재도약을 돕습니다 ✨</p>
-        </header>
-
-        <section class="content-section">
-            <h2>📖 1. 사업 소개</h2>
-            <p><strong>OOOO패키지</strong>는 경영위기를 겪고 있거나 폐업(예정)인 OOOO을 대상으로 폐업 부담을 덜어주고 신속한 재기(취업 및 재창업)를 돕기 위해 폐업부터
-                취업·사업화까지 패키지로 지원하는 든든한 지원 사업입니다.</p>
-            <ul>
-                <li>📊 <strong>지원 규모:</strong> 10만 건 내외 (예산 3,056억 원)</li>
-                <li>🎯 <strong>지원 대상:</strong> 경영위기 및 폐업(예정) 소상공인</li>
-            </ul>
-        </section>
-
-        <section class="content-section">
-            <h2>📋 2. 지원 사업 목록 및 세부 내용</h2>
-            <p>지원 사업은 OOOO의 상황에 맞춰 크게 3가지 분야로 나뉘어 운영됩니다.</p>
-
-            <div class="card-grid">
-                <div class="card">
-                    <h3>🛠️ ① OOOO 폐업 지원</h3>
-                    <ul>
-                        <li><strong>📝 사업정리 컨설팅:</strong> 폐업 시 절세 및 신고사항, 집기 처분 방법 등 자문</li>
-                        <li><strong>🏗️ 점포철거비 지원:</strong> 점포 철거 및 원상복구 비용 지원 (최대 600만 원)</li>
-                        <li><strong>⚖️ 법률 자문:</strong> 임대차, 신용, 노무, 세무 등에 대한 전문 법률 자문</li>
-                        <li><strong>🤝 채무 조정:</strong> 채무조정 솔루션 및 소송대리 지원</li>
-                    </ul>
+    <!-- 1. 스티키 헤더 (초기엔 숨김) -->
+    <header id="sticky-header"
+        class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b py-3 transition-transform duration-300 sticky-inactive">
+        <div class="max-w-6xl mx-auto px-4 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-2 shrink-0">
+                <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
                 </div>
+                <span class="font-bold text-lg tracking-tight">ChatSpark <span class="text-indigo-600">AI</span></span>
+            </div>
 
-                <div class="card">
-                    <h3>💼 ② OOOO 취업 지원</h3>
-                    <ul>
-                        <li><strong>🎓 취업 교육:</strong> 직업탐색, 기초 교육 및 대면 취업상담 등 심화 교육</li>
-                        <li><strong>💰 전직장려수당:</strong> 수료 및 취업 후 6개월 근속 시 총 100만 원 지급</li>
-                        <li><strong>🔗 국민취업 연계:</strong> 국민취업지원제도와 연계하여 활동 시 최대 120만 원 지원</li>
-                        <li><strong>🌿 심리 치유:</strong> 산림치유 및 심리지원서비스 제공</li>
-                    </ul>
-                </div>
+            <form id="sticky-search-form" class="flex-grow max-w-xl relative">
+                <input type="text" id="sticky-query" placeholder="무엇이든 물어보세요..."
+                    class="w-full pl-10 pr-12 py-2 bg-slate-100 border-none rounded-xl focus:ring-2 focus:ring-indigo-500 text-sm transition-all">
+                <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4"></i>
+                <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-indigo-600">
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+            </form>
 
-                <div class="card">
-                    <h3>🚀 ③ OOOO 사업화 지원</h3>
-                    <ul>
-                        <li><strong>🩺 경영 진단:</strong> 분야별 전문가를 통한 사업체별 1:1 문제 진단</li>
-                        <li><strong>📚 사업화 교육:</strong> 세무, 마케팅 등 즉시 적용 가능한 실습 교육</li>
-                        <li><strong>💸 사업화 자금:</strong> 문제 해결을 위한 자금(최대 2,000만 원) 지원</li>
-                        <li><strong>👨‍🏫 전담 PM 지원:</strong> 전담 PM 상시 1:1 매칭 및 밀착 관리</li>
-                    </ul>
+            <button class="hidden md:block px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold">신청하기</button>
+        </div>
+    </header>
+
+    <!-- 2. 히어로 섹션 -->
+    <section class="pt-32 pb-20 px-6 bg-gradient-to-b from-indigo-50 to-white">
+        <div class="max-w-4xl mx-auto text-center">
+            <div
+                class="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-100 rounded-full text-[11px] font-bold text-slate-500 mb-6 shadow-sm">
+                <i data-lucide="info" class="w-3 h-3 text-indigo-500"></i> (데모) 2026 OOOO패키지 업데이트 완료
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight">
+                사장님의 새로운 시작,<br>
+                <span class="text-indigo-600">AI 검색</span>으로 해결하세요.
+            </h1>
+            <p class="text-lg text-slate-500 mb-10 max-w-2xl mx-auto">
+                더 이상 복잡한 공고문을 읽지 마세요. 질문 하나로 사장님께 딱 맞는 지원사업과 혜택을 실시간으로 안내해 드립니다.
+            </p>
+
+            <!-- 메인 지능형 검색창 인터페이스 -->
+            <div id="search-container" class="relative max-w-2xl mx-auto transition-all duration-500">
+                <div class="bg-white rounded-[28px] shadow-2xl border border-slate-100 overflow-hidden glow">
+                    <form id="hero-search-form" class="flex items-center p-2">
+                        <div class="pl-4 text-indigo-500">
+                            <i data-lucide="search" class="w-6 h-6"></i>
+                        </div>
+                        <input type="text" id="hero-query" placeholder="점포 철거비 최대 600만원 신청법..."
+                            class="flex-grow px-4 py-4 text-lg border-none focus:ring-0 placeholder:text-slate-300">
+                        <button type="submit"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-2xl font-bold flex items-center gap-2 shadow-lg shadow-indigo-100 transition-all active:scale-95">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i>
+                            <span>상담 시작</span>
+                        </button>
+                    </form>
+
+                    <!-- 추천 질문 칩 -->
+                    <div id="chips-area" class="flex flex-wrap gap-2 px-6 pb-6 pt-2 border-t border-slate-50">
+                        <span class="text-[10px] uppercase font-bold text-slate-400 w-full text-left mb-1">인기 질문</span>
+                        <button onclick="useChip('철거비 600만원 지원 조건')"
+                            class="px-4 py-2 bg-slate-50 hover:bg-indigo-50 border border-slate-100 hover:border-indigo-100 rounded-xl text-xs font-semibold text-slate-600 hover:text-indigo-600 transition-all">철거비
+                            600만원 지원 조건</button>
+                        <button onclick="useChip('전직장려수당 신청 방법')"
+                            class="px-4 py-2 bg-slate-50 hover:bg-indigo-50 border border-slate-100 hover:border-indigo-100 rounded-xl text-xs font-semibold text-slate-600 hover:text-indigo-600 transition-all">전직장려수당
+                            신청 방법</button>
+                        <button onclick="useChip('재창업 자금 2천만원')"
+                            class="px-4 py-2 bg-slate-50 hover:bg-indigo-50 border border-slate-100 hover:border-indigo-100 rounded-xl text-xs font-semibold text-slate-600 hover:text-indigo-600 transition-all">재창업
+                            자금 2천만원</button>
+                    </div>
+
+                    <!-- 인라인 대화창 (초기엔 숨김) -->
+                    <div id="chat-results"
+                        class="hidden-chat max-h-[500px] overflow-y-auto bg-slate-50 border-t border-slate-100 p-6 text-left">
+                        <div id="message-list" class="space-y-6">
+                            <!-- 메시지들이 여기 동적으로 추가됩니다 -->
+                        </div>
+                        <div id="typing-indicator" class="hidden mt-4 flex gap-4">
+                            <div
+                                class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                                <i data-lucide="bot" class="w-4 h-4"></i></div>
+                            <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200 chat-bubble-bot">
+                                <div class="flex gap-1">
+                                    <div class="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce"></div>
+                                    <div
+                                        class="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce [animation-delay:0.2s]">
+                                    </div>
+                                    <div
+                                        class="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce [animation-delay:0.4s]">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8 flex justify-center">
+                            <button onclick="resetChat()"
+                                class="text-[11px] font-bold text-slate-400 hover:text-slate-600 flex items-center gap-1 border border-slate-200 px-3 py-1 rounded-full hover:bg-white transition-all">
+                                <i data-lucide="x" class="w-3 h-3"></i> 상담 종료 및 초기화
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="content-section highlight-box">
-            <h2>💡 2026년 주요 혜택 변경 사항</h2>
-            <p>올해는 OOOO의 현실적인 부담을 한층 더 낮추고 재기를 돕기 위해 혜택이 <strong>크게 확대</strong>되었습니다!</p>
-            <ul>
-                <li><strong>🎉 OOOO 지원액 인상:</strong> <span>최대 400만 원 ➔ <strong>600만 원</strong> (대폭 상향!)</span></li>
-                <li><strong>📈 OOOO지원제도 연계 규모:</strong> <span>2천 명 ➔ <strong>3천 명</strong> 확대</span></li>
-            </ul>
-        </section>
+    <!-- 3. 콘텐츠 영역 (원본의 정보를 카드 형태로 배치) -->
+    <main class="max-w-6xl mx-auto px-6 py-20">
+        <h2 class="text-2xl font-bold mb-10 flex items-center gap-2">
+            <i data-lucide="clipboard-list" class="text-indigo-600"></i> 주요 지원 사업 한눈에 보기
+        </h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div
+                class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:shadow-indigo-50 transition-all">
+                <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i data-lucide="trash-2"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4">점포 철거 지원</h3>
+                <p class="text-slate-500 text-sm leading-relaxed mb-6">폐업 시 점포 철거 및 원상복구 비용을 지원합니다. (최대 600만원)</p>
+                <button onclick="useChip('점포 철거비 신청 대상과 서류가 뭐야?')"
+                    class="text-rose-600 font-bold text-xs flex items-center gap-1">상세 조건 질문하기 <i
+                        data-lucide="chevron-right" class="w-4 h-4"></i></button>
+            </div>
+            <div
+                class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:shadow-indigo-50 transition-all">
+                <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i data-lucide="briefcase"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4">재취업 교육 및 수당</h3>
+                <p class="text-slate-500 text-sm leading-relaxed mb-6">취업 교육 수료 시 100만원의 전직장려수당을 지급해 드립니다.</p>
+                <button onclick="useChip('전직장려수당 100만원 받는 조건')"
+                    class="text-emerald-600 font-bold text-xs flex items-center gap-1">신청 방법 질문하기 <i
+                        data-lucide="chevron-right" class="w-4 h-4"></i></button>
+            </div>
+            <div
+                class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl hover:shadow-indigo-50 transition-all">
+                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i data-lucide="rocket"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4">재창업 사업화 지원</h3>
+                <p class="text-slate-500 text-sm leading-relaxed mb-6">새로운 시작을 위한 사업화 자금을 최대 2,000만원까지 지원합니다.</p>
+                <button onclick="useChip('재창업 자금 2000만원 신청 기간')"
+                    class="text-blue-600 font-bold text-xs flex items-center gap-1">자금 지원 질문하기 <i
+                        data-lucide="chevron-right" class="w-4 h-4"></i></button>
+            </div>
+        </div>
+    </main>
 
-        <footer class="landing-footer">
-            <p>해당 사업은 <a href="https://hope.sbiz.or.kr" target="_blank">OOOO패키지 홈페이지</a>를 통해 온라인으로 신청 및 접수할 수 있습니다.</p>
-        </footer>
-    </div>
+    <footer class="bg-slate-900 text-slate-500 py-12 px-6">
+        <div class="max-w-6xl mx-auto text-center">
+            <p class="text-sm">© 2026 ChatSpark AI Demo. Antigravity 협업용 Vanilla JS 버전</p>
+        </div>
+    </footer>
 
+    <script>
+        // Lucide 아이콘 초기화
+        lucide.createIcons();
+
+        const stickyHeader = document.getElementById('sticky-header');
+        const heroSearchForm = document.getElementById('hero-search-form');
+        const stickySearchForm = document.getElementById('sticky-search-form');
+        const heroInput = document.getElementById('hero-query');
+        const stickyInput = document.getElementById('sticky-query');
+        const chatResults = document.getElementById('chat-results');
+        const chipsArea = document.getElementById('chips-area');
+        const messageList = document.getElementById('message-list');
+        const typingIndicator = document.getElementById('typing-indicator');
+
+        // 1. 스크롤 이벤트: 스티키 헤더 제어
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                stickyHeader.classList.remove('sticky-inactive');
+                stickyHeader.classList.add('sticky-active');
+            } else {
+                stickyHeader.classList.remove('sticky-active');
+                stickyHeader.classList.add('sticky-inactive');
+            }
+        });
+
+        // 인라인 챗봇의 대화 히스토리 (script.js의 state와 충돌하지 않도록 분리)
+        let inlineConversationHistory = [];
+        let inlineCurrentStep = 'inquiry';
+        let inlineLeadInfo = { name: '', contact: '', consent: false, chatLog: '' };
+
+        // 2. 검색 및 대화 로직
+        async function handleSearch(query) {
+            if (!query.trim()) return;
+
+            // UI 업데이트: 칩 숨기고 대화창 열기
+            chipsArea.style.display = 'none';
+            chatResults.classList.remove('hidden-chat');
+
+            // 사용자 메시지 추가
+            addMessage('user', query);
+            inlineConversationHistory.push({ role: "user", content: query });
+            typingIndicator.classList.remove('hidden');
+
+            // 하단 자동 스크롤
+            chatResults.scrollTop = chatResults.scrollHeight;
+
+            try {
+                // Vercel backend. (Same as script.js)
+                const payload = {
+                    contents: inlineConversationHistory.map(msg => ({
+                        role: msg.role === 'user' ? 'user' : 'model',
+                        parts: [{ text: msg.content }]
+                    })),
+                    systemInstruction: {
+                        parts: [{ text: "당신은 'OOOO패키지' 지원사업의 전문 AI 가이드입니다. 소상공인 사용자에게 친절하고 구체적으로 답변하세요. 점포철거비(600만원), 전직장려수당(100만원), 사업화지원(2000만원) 등 핵심 수치를 강조하며 답변 끝에는 추가로 궁금해할 만한 추천 질문을 한 줄 적어주세요." }]
+                    }
+                };
+
+                const response = await fetchWithRetry(`https://selim-chat-spark.vercel.app/api/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                typingIndicator.classList.add('hidden');
+
+                if (response.ok && data.text) {
+                    let botReply = data.text;
+                    let triggerFound = false;
+
+                    if (botReply.includes('[INQUIRY_COMPLETE]')) {
+                        triggerFound = true;
+                        botReply = botReply.replace('[INQUIRY_COMPLETE]', '').trim();
+                    }
+
+                    if (botReply) {
+                        addMessage('bot', botReply);
+                        inlineConversationHistory.push({ role: "model", content: botReply });
+                    }
+
+                    // 리드 수집 트리거 (간단히 처리)
+                    if (triggerFound) {
+                        setTimeout(() => {
+                            addMessage('bot', "상담 접수를 원하시면 하단의 **플로팅 챗봇 아이콘**을 클릭하여 계속 진행해주세요.");
+                        }, 1000);
+                    }
+                } else {
+                    addMessage('bot', "오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+                }
+
+            } catch (error) {
+                typingIndicator.classList.add('hidden');
+                addMessage('bot', "네트워크 오류가 발생했습니다. 다시 시도해 주세요.");
+            }
+
+            chatResults.scrollTop = chatResults.scrollHeight;
+        }
+
+        // 지수 백오프를 포함한 Fetch 함수
+        async function fetchWithRetry(url, options, retries = 5, backoff = 1000) {
+            try {
+                const res = await fetch(url, options);
+                if (!res.ok && retries > 0) throw new Error();
+                return res;
+            } catch (err) {
+                if (retries <= 0) throw err;
+                await new Promise(resolve => setTimeout(resolve, backoff));
+                return fetchWithRetry(url, options, retries - 1, backoff * 2);
+            }
+        }
+
+        function addMessage(role, text) {
+            const div = document.createElement('div');
+            div.className = `flex gap-4 ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+
+            const icon = role === 'user' ? 'user' : 'bot';
+            const bgClass = role === 'user' ? 'bg-indigo-600 text-white chat-bubble-user' : 'bg-white border border-slate-200 text-slate-700 chat-bubble-bot';
+
+            div.innerHTML = `
+                ${role === 'bot' ? `<div class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 shrink-0"><i data-lucide="bot" class="w-4 h-4"></i></div>` : ''}
+                <div class="${bgClass} p-4 rounded-2xl text-sm shadow-sm max-w-[85%] leading-relaxed">${text}</div>
+                ${role === 'user' ? `<div class="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 shrink-0"><i data-lucide="user" class="w-4 h-4"></i></div>` : ''}
+            `;
+            messageList.appendChild(div);
+            lucide.createIcons(); // 새로 추가된 아이콘 렌더링
+        }
+
+        function useChip(text) {
+            heroInput.value = text;
+            handleSearch(text);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetChat() {
+            messageList.innerHTML = '';
+            chatResults.classList.add('hidden-chat');
+            chipsArea.style.display = 'flex';
+            heroInput.value = '';
+            inlineConversationHistory = []; // Reset history
+        }
+
+        // 폼 이벤트 바인딩
+        heroSearchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            handleSearch(heroInput.value);
+            heroInput.value = '';
+        });
+
+        stickySearchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            handleSearch(stickyInput.value);
+            stickyInput.value = '';
+        });
+    </script>
+    
     <!-- Floating Chat Button -->
     <button class="floating-chat-btn" id="floatingChatBtn" onclick="toggleChatWindow()">
-        <span class="btn-text">OOOO패키지 신청 상담</span>
+        <span class="btn-text">상담 시작</span>
         <i class="fas fa-comment-dots"></i>
     </button>
 
-    <!-- GEMINI AI CHAT WIDGET (Ported from flashgta) -->
+    <!-- GEMINI AI CHAT WIDGET -->
     <div class="ai-chat-window" id="aiChatWindow">
         <div class="chat-header">
             <div class="chat-header-icon">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
             </div>
             <div class="chat-header-info">
@@ -118,15 +390,14 @@
             <div class="message bot-message">
                 <div class="message-content">
                     안녕하세요! 무엇을 도와드릴까요?
-                    <br>OOOO패키지에 대해 궁금하신 점을 물어보세요!
+                    <br>지원 사항에 대해 궁금하신 점을 물어보세요!
                 </div>
             </div>
         </div>
 
         <div class="chat-input-area">
             <div class="chat-input-wrapper">
-                <input type="text" class="chat-input" id="chatInput" placeholder="메시지를 입력하세요..."
-                    onkeypress="handleKeyPress(event)">
+                <input type="text" class="chat-input" id="chatInput" placeholder="메시지를 입력하세요..." onkeypress="handleKeyPress(event)">
                 <button class="chat-send-btn" id="chatSendBtn" onclick="sendMessage()">
                     <i class="fas fa-paper-plane"></i>
                 </button>
@@ -134,6 +405,7 @@
         </div>
     </div>
 
+    <!-- Script loading for floating chatbot -->
     <script src="script.js"></script>
 </body>
 
