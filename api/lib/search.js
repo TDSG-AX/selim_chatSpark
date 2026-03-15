@@ -76,7 +76,7 @@ class MiniBM25 {
  */
 function initializeSearch() {
   const engine = new MiniBM25();
-  const baseFiles = ['base01.md', 'base02.md', 'base03.md', 'base04.md', 'CONVERSATIONAL_GUIDE.md'];
+  const baseFiles = ['base01.md', 'base02.md', 'base03.md', 'base04.md'];
   const baseDir = path.join(__dirname, '../../');
 
   baseFiles.forEach(filename => {
