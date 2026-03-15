@@ -20,7 +20,6 @@
 ```
 selim_chatSpark/
 ├── index.html          # [NEW] 메인 랜딩 페이지 (Search-First UX, TailwindCSS)
-├── index_v1.html       # [OLD] 이전 버전 메인 페이지 (백업 및 비교용)
 ├── chat-widget.css     # 플로팅 챗봇 UI 전용 스타일시트 (Tailwind 충돌 방지)
 ├── script.js           # 플로팅 챗봇 로직 & 리드 수집 상태 관리 머신
 ├── CONVERSATIONAL_GUIDE.md # 챗봇 대화 설계 원칙 및 정책 문서 (RAG 제외, Prompt 내재화)
@@ -53,7 +52,30 @@ selim_chatSpark/
 ---
 
 ## 🤖 AI 하이브리드 대화 흐름 (2-Track Workflow)
-동일한 지식 베이스(BM25)와 AI 모델(Gemini)을 활용하되, 사용자의 진입점과 목적에 따라 두 가지 프로세스를 지원합니다.
+동일한 지식 베이스(BM25)와 AI 모델(Gemini)을 활용하되, 사용자의 진입점과 목적에 따라 두 가지 뚜렷한 프로세스 경험 지도를 지원합니다.
+
+```mermaid
+graph TD
+    A([사용자 방문]) --> B{목적에 따른 진입점}
+    B -->|단순 정보 검색| C(Track 1: 메인 검색창 인라인 챗봇)
+    B -->|전문 상담 신청| D(Track 2: 플로팅 챗봇)
+
+    %% Track 1 Flow
+    C --> C1[키워드 및 자연어 질문]
+    C1 --> C2[정책 요약 및 맞춤형 답변]
+    C2 --> C3{추가 심층 상담?}
+    C3 -->|Yes: 버튼 클릭| D
+    C3 -->|No: 정보 획득| C4([지원 사업 공고 바로가기])
+
+    %% Track 2 Flow
+    D --> D1[자유 대화 및 상황 파악]
+    D1 --> D2{목적 달성/전문가 필요?}
+    D2 -->|대화 지속| D1
+    D2 -->|개입 판단: INQUIRY_COMPLETE| D3[개인정보 제공 동의 요청]
+    D3 --> D4[이름 및 연락처 입력]
+    D4 --> D5[EmailJS API 호출 - 담당자 메일 전송]
+    D5 --> D6([상담 접수 완료])
+```
 
 ### Track 1. 지원대상 서비스 AI 검색 (인라인 챗봇)
 메인 화면의 중앙 검색창을 통해 진입하며, 궁금한 점을 즉시 해소하는 데 목적을 둡니다.
