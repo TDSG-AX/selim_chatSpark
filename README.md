@@ -1,58 +1,35 @@
-# 지원사업 선정 AI 챗봇 (ChatSpark)
+# 지능형 공공서비스 AI 가이드 (ChatSpark Demo)
 
-이 프로젝트는 민원인을 대상으로 OOOO패키지 지원사업을 안내하고 상담하는 AI 챗봇 서비스입니다. 바닐라 웹 기술(HTML/CSS/JS)과 Vercel 서버리스 함수, 그리고 Google Gemini AI를 결합하여 설계되었습니다.
+이 프로젝트는 소상공인을 대상으로 **OOOO패키지 지원사업(데모)**을 안내하고 상담하는 검색 기반 AI 가이드 서비스입니다. 바닐라 웹 기술(HTML/CSS/Vanilla JS)과 Vercel 서버리스 함수, 그리고 Google Gemini AI를 결합하여 설계된 'Search-First UX' 기반의 모던 웹 애플리케이션입니다.
 
-## 데모 ## [selim_chatSpark](https://tdsg-ax.github.io/selim_chatSpark)
+## 🚀 실시간 데모 (Demo)
+👉 **[ChatSpark AI 가이드 바로가기](https://tdsg-ax.github.io/selim_chatSpark)**
 
-## 📐 전체 아키텍처 (워크플로우)
-```
-사용자 브라우저
-    │
-    ▼
-[GitHub Pages] TDSG-AX.github.io/selim_chatSpark
-    │  
-    ▼
-[Vercel] chatSpark Vercel 배포 주소 (예정)
-    │  (정적 HTML/CSS + API 라우팅 서빙)
-    │
-    ├─── /api/chat (POST)
-    │         │
-    │         ▼
-    │    [Vercel Serverless Function] api/chat.js
-    │         │
-    │         ▼
-    │    [Google Gemini API] 
-    │         │  AI 응답 반환
-    │         ▼
-    │    브라우저에 응답
-    │
-    └─── /api/send-email (POST) (추가 예정 기능)
-              │
-              ▼
-         [Vercel Serverless Function] api/send-email.js
-              │
-              ▼
-         [EmailJS API]
-              │  이메일 발송
-              ▼
-         담당자 이메일 수신
-```
+---
+
+## 📐 핵심 특징 (Features)
+
+1. **Search-First UX:** 사용자가 거부감을 느끼는 기존의 플로팅 챗봇을 넘어, 메인 검색창에서 바로 인라인 AI 대화가 전개되는 직관적인 검색-채팅 통합 경험을 제공합니다.
+2. **Context-First Prompting:** 시스템 프롬프트에 '짧은 대화와 맥락 파악'을 강제하여, 이름이나 연락처를 무작정 묻지 않고 2~3번의 가벼운 질문을 통해 상황을 먼저 파악합니다.
+3. **Smart Breakout & Lead Capture:** AI가 상담원 개입이 필요하다고 판단하면(`[INQUIRY_COMPLETE]`), 자연스럽게 이메일 폼을 통해 전문 상담사 연결(리드 수집)을 유도합니다.
+4. **Actionable Links:** 설명에 그치지 않고, AI가 적절한 지원사업 공고 링크를 클릭 가능한 버튼(`<a href="...">`) 형태로 직접 렌더링합니다.
 
 ---
 
 ## 🗂️ 파일 구조
 ```
 selim_chatSpark/
-├── index.html          # 메인 랜딩 페이지 (oooo패키지 소개 + AI 챗봇 UI)
-├── style.css           # 전체 스타일시트 (봄 테마 코랄/핑크 색상 적용)
-├── script.js           # 프론트엔드 챗봇 UI 로직 (상태 관리 로직 추가 예정)
-├── base01~04.md        # AI 챗봇의 지식 베이스 문서 (지원금, 자격, 사례 등)
+├── index.html          # [NEW] 메인 랜딩 페이지 (Search-First UX, TailwindCSS)
+├── index_v1.html       # [OLD] 이전 버전 메인 페이지 (백업 및 비교용)
+├── chat-widget.css     # 플로팅 챗봇 UI 전용 스타일시트 (Tailwind 충돌 방지)
+├── script.js           # 플로팅 챗봇 로직 & 리드 수집 상태 관리 머신
+├── CONVERSATIONAL_GUIDE.md # 챗봇 대화 설계 원칙 및 정책 문서 (RAG 제외, Prompt 내재화)
+├── base01~04.md        # AI 챗봇의 지식 베이스 문서 (RAG 검색 대상)
 ├── api/
-│   ├── chat.js         # Gemini AI 호출 및 검색 엔진 연동 서버리스 함수
+│   ├── chat.js         # Gemini AI 연동 서버리스 API (System Prompt, BM25 포함)
+│   ├── send-email.js   # 리드 수집 시 EmailJS 등 이메일 발송 릴레이 API
 │   └── lib/
-│       └── search.js   # [신규] BM25 기반 초경량 한국어 검색 엔진
-├── scripts/
-│   └── evaluate.js     # 검색 성능 평가 스크립트
+│       └── search.js   # BM25 기반 초경량 한국어 검색 엔진 (메모리 상주형)
 └── README.md           # 이 문서
 ```
 
