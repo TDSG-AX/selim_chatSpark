@@ -2,7 +2,7 @@
 
 이 프로젝트는 소상공인을 대상으로 희망리턴패키지 지원사업을 안내하고 상담하는 AI 챗봇 서비스입니다. 바닐라 웹 기술(HTML/CSS/JS)과 Vercel 서버리스 함수, 그리고 Google Gemini AI를 결합하여 설계되었습니다.
 
-#데모# [selim_chatSpark](https://tdsg-ax.github.io/selim_chatSpark)
+## 데모 ## [selim_chatSpark](https://tdsg-ax.github.io/selim_chatSpark)
 
 ## 📐 전체 아키텍처 (워크플로우)
 ```
